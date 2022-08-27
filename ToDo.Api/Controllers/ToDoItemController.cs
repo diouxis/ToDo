@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ToDo.Api.Controllers
 {
     using Models;
+    using System.Diagnostics.CodeAnalysis;
 
     [ApiController]
     [Route("[controller]")]
@@ -15,14 +16,14 @@ namespace ToDo.Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetToDoItems")]
-        public IEnumerable<ToDoItem> List()
+        [HttpGet("Fetch/{id}")]
+        public IEnumerable<ToDoItem> List([FromRoute] int id)
         {
             return new ToDoItem[]
             {
                 new ToDoItem
                 {
-                    Id = 1,
+                    Id = id,
                     Name = "Test 1",
                     StartDate = DateTime.Now.AddHours(-1),
                     FinishDate = DateTime.Now
@@ -34,6 +35,24 @@ namespace ToDo.Api.Controllers
                     StartDate = DateTime.Now
                 }
             };
+        }
+
+        [HttpGet("hName/{type}")]
+        public string? GetName([FromRoute] string type)
+        {
+            TODoIndex result = new TODoIndex()
+            {
+                NameA = "a",
+                NameB = "b",
+                NameC = "c"
+            };
+
+            var property = typeof(TODoIndex).GetProperty(type);
+            if (property != null)
+            {
+                return property.GetValue(result) as string;
+            }
+            return "Name not found";
         }
     }
 }

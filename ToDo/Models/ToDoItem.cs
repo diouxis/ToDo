@@ -15,4 +15,11 @@ namespace ToDo.Models
         public DateTime StartDate  { get; set; }
         public DateTime? FinishDate { get; set; }
     }
+
+    public class TODoIndex
+    {
+        public string NameA { get; set; } = "A";
+        public string NameB { get; set; } = "B";
+        public string NameC { get; set; } = "C";
+    }
 }

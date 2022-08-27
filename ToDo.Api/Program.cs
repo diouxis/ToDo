@@ -37,14 +37,13 @@ namespace ToDo.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
-            app.UseHttpsRedirection();
+            else
+            {
+                app.UseHttpsRedirection();
+            }
 
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
 
