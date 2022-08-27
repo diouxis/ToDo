@@ -1,4 +1,5 @@
 using Microsoft.Extensions.FileProviders;
+using ToDo.Models;
 
 namespace ToDo.Api
 {
@@ -28,6 +29,8 @@ namespace ToDo.Api
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSingleton<ToDoName>();
 
             var app = builder.Build();
 

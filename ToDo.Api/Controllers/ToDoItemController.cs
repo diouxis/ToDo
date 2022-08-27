@@ -3,35 +3,39 @@ using Microsoft.AspNetCore.Mvc;
 namespace ToDo.Api.Controllers
 {
     using Models;
-    using System.Diagnostics.CodeAnalysis;
 
     [ApiController]
     [Route("[controller]")]
     public class ToDoItemController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly ILogger<ToDoItemController> _logger;
+        private readonly ToDoName _todoName;
 
-        public ToDoItemController(ILogger<ToDoItemController> logger)
+        public ToDoItemController(ILogger<ToDoItemController> logger, IConfiguration configuration, ToDoName todoName)
         {
             _logger = logger;
+            _configuration = configuration;
+            _todoName = todoName;
         }
 
         [HttpGet("Fetch/{id}")]
         public IEnumerable<ToDoItem> List([FromRoute] int id)
         {
+            string itemName = _configuration.GetValue<string>("ItemName");
             return new ToDoItem[]
             {
                 new ToDoItem
                 {
                     Id = id,
-                    Name = "Test 1",
+                    Name = itemName,
                     StartDate = DateTime.Now.AddHours(-1),
                     FinishDate = DateTime.Now
                 },
                 new ToDoItem
                 {
                     Id = 2,
-                    Name = "Test 2",
+                    Name = _todoName.DefaultName ?? "Default",
                     StartDate = DateTime.Now
                 }
             };
