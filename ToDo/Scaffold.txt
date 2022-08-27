@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "Data Source=spirit-sit.endataclaims.com;Initial Catalog=ToDo;User ID=ENData_Admin;Password=34@qs`$er;MultipleActiveResultSets=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entity

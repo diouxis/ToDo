@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ToDo.Models
+namespace ToDo.ViewModel
 {
     public class ToDoName
     {

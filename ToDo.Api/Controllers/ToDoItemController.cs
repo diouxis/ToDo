@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ToDo.Api.Controllers
 {
-    using Models;
+    using Entity;
+    using Microsoft.EntityFrameworkCore;
+    using ViewModel;
 
     [ApiController]
     [Route("[controller]")]
@@ -10,35 +12,49 @@ namespace ToDo.Api.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<ToDoItemController> _logger;
+        private readonly ToDoContext _context;
         private readonly ToDoName _todoName;
 
-        public ToDoItemController(ILogger<ToDoItemController> logger, IConfiguration configuration, ToDoName todoName)
+        public ToDoItemController(ILogger<ToDoItemController> logger, IConfiguration configuration, ToDoName todoName, ToDoContext context)
         {
             _logger = logger;
             _configuration = configuration;
             _todoName = todoName;
+            _context = context;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ToDoItem?> Get([FromRoute] int id)
+        {
+            var result = await _context.ToDoItems
+                .FirstOrDefaultAsync(x => x.Id == id);
+            return result;
         }
 
         [HttpGet("Fetch/{id}")]
-        public IEnumerable<ToDoItem> List([FromRoute] int id)
+        public IEnumerable<ToDoItemView> Fetch([FromRoute] int id)
         {
             string itemName = _configuration.GetValue<string>("ItemName");
-            return new ToDoItem[]
+            var results =  new ToDoItemView[]
             {
-                new ToDoItem
+                new ToDoItemView
                 {
                     Id = id,
                     Name = itemName,
                     StartDate = DateTime.Now.AddHours(-1),
-                    FinishDate = DateTime.Now
+                    FinishDate = DateTime.Now,
+                    Order = 1
                 },
-                new ToDoItem
+                new ToDoItemView
                 {
                     Id = 2,
                     Name = _todoName.DefaultName ?? "Default",
-                    StartDate = DateTime.Now
+                    StartDate = DateTime.Now,
+                    Order = 2
                 }
             };
+
+            return results;
         }
 
         [HttpGet("hName/{type}")]

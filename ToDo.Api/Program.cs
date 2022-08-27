@@ -1,5 +1,7 @@
 using Microsoft.Extensions.FileProviders;
-using ToDo.Models;
+using Microsoft.EntityFrameworkCore;
+using ToDo.Entity;
+using ToDo.ViewModel;
 
 namespace ToDo.Api
 {
@@ -29,6 +31,11 @@ namespace ToDo.Api
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<ToDoContext>((svc, opt) => opt.UseSqlServer(builder.Configuration.GetConnectionString("ToDo"), sqlOpt =>
+            {
+                sqlOpt.CommandTimeout(120);
+                sqlOpt.EnableRetryOnFailure();
+            }));
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddSingleton<ToDoName>();
 
